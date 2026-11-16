@@ -1019,7 +1019,7 @@ const emailService = {
 				emailDataList.push(emailValues);
 
 					} else {
-			//无收件人：catch-all 打开时直接归到管理员账号，任意前缀都能进管理员收件箱 
+			//无收件人：catch-all 打开时直接归到管理员账号，任意前缀都能进管理员收件箱
 				// allAccounts 只含本次收件人匹配到的账号，无匹配时为空，不能在这里找管理员，必须直接查库。
 			const adminRows = await orm(c).select().from(account).where(inArray(sql`${account.email} COLLATE NOCASE`, [c.env.admin])).all();
 				const adminAccount = adminRows[0];
