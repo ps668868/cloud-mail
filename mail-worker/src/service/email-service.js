@@ -1018,23 +1018,29 @@ const emailService = {
 
 				emailDataList.push(emailValues);
 
+					} else {
+			//无收件人：catch-all 打开时直接归到管理员账号，任意前缀都能进管理员收件箱
+			const adminAccount = allAccounts.find(accountRow => accountRow.email.toLowerCase() === (c.env.admin || '').toLowerCase());
+			if (adminAccount && noRecipient !== settingConst.noRecipient.CLOSE) {
+				emailValues.userId = adminAccount.userId;
+				emailValues.accountId = adminAccount.accountId;
+				emailValues.type = emailConst.type.RECEIVE;
+				emailValues.status = emailConst.status.RECEIVE;
 			} else {
-
 				//设置无收件人邮件信息
 				emailValues.userId = 0;
 				emailValues.accountId = 0;
 				emailValues.type = emailConst.type.RECEIVE;
 				emailValues.status = emailConst.status.NOONE;
-
 				//如果无人收件关闭改为拒收
 				if (noRecipient === settingConst.noRecipient.CLOSE) {
 					emailValues.status = emailConst.status.BOUNCED;
 					emailValues.message = `Recipient not found: <${email}>`;
 				}
-
-				emailDataList.push(emailValues);
-
 			}
+
+			emailDataList.push(emailValues);
+		}
 
 		}
 
