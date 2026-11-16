@@ -76,7 +76,7 @@ export async function email(message, env, ctx) {
 			return;
 		}
 
-		let userRow = {}
+		/* 无收件人且 catch-all 打开时，归到管理员账号，任意前缀都能进管理员收件箱。注意：Email Routing 收信走本函数，不走 email-service.js 的 HandleOnSiteEmail，归属必须在这里定 */ if (!account) { account = await accountService.selectByEmailIncludeDel({ env: env }, env.admin); } let userRow = {}
 
 		if (account) {
 			 userRow = await userService.selectByIdIncludeDel({ env: env }, account.userId);
